@@ -1,0 +1,10 @@
+# AWS and Kubernetes installation files
+aws/
+awscliv2.zip
+eksctl
+eksctl_Linux_amd64.tar.gz
+kubectl
+
+# Temporary files
+*.log
+*.tmp
