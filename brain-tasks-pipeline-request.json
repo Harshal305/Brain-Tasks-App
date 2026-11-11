@@ -1,0 +1,104 @@
+{
+  "pipeline": {
+    "name": "brain-tasks-pipeline",
+    "roleArn": "arn:aws:iam::607705367381:role/AWSCodePipelineServiceRole-us-east-1-brain-tasks",
+    "artifactStore": {
+      "type": "S3",
+      "location": "codepipeline-us-east-1-4c83f2123779-4f5a-8ff4-edcd8e3993ef"
+    },
+    "stages": [
+      {
+        "name": "Source",
+        "actions": [
+          {
+            "name": "Source",
+            "actionTypeId": {
+              "category": "Source",
+              "owner": "AWS",
+              "provider": "CodeStarSourceConnection",
+              "version": "1"
+            },
+            "runOrder": 1,
+            "configuration": {
+              "BranchName": "main",
+              "ConnectionArn": "arn:aws:codestar-connections:us-east-1:607705367381:connection/58997d7a-9be4-4ce0-89a8-d6f3d47a1121",
+              "DetectChanges": "false",
+              "FullRepositoryId": "Harshal305/Brain-Tasks-App",
+              "OutputArtifactFormat": "CODE_ZIP"
+            },
+            "outputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ],
+            "inputArtifacts": [],
+            "region": "us-east-1",
+            "namespace": "SourceVariables"
+          }
+        ],
+        "onFailure": {
+          "result": "RETRY",
+          "retryConfiguration": {
+            "retryMode": "ALL_ACTIONS"
+          }
+        }
+      },
+      {
+        "name": "Build",
+        "actions": [
+          {
+            "name": "Build",
+            "actionTypeId": {
+              "category": "Build",
+              "owner": "AWS",
+              "provider": "CodeBuild",
+              "version": "1"
+            },
+            "runOrder": 1,
+            "configuration": {
+              "ProjectName": "brain-tasks-codebuild"
+            },
+            "outputArtifacts": [
+              {
+                "name": "BuildArtifact"
+              }
+            ],
+            "inputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ],
+            "region": "us-east-1",
+            "namespace": "BuildVariables"
+          }
+        ],
+        "onFailure": {
+          "result": "RETRY",
+          "retryConfiguration": {
+            "retryMode": "ALL_ACTIONS"
+          }
+        }
+      }
+    ],
+    "version": 1,
+    "executionMode": "SUPERSEDED",
+    "pipelineType": "V2",
+    "triggers": [
+      {
+        "providerType": "CodeStarSourceConnection",
+        "gitConfiguration": {
+          "sourceActionName": "Source",
+          "push": [
+            {
+              "branches": {
+                "includes": [
+                  "main"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
