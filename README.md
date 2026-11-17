@@ -239,8 +239,7 @@ kubectl logs deployment/brain-tasks-app
 
 ### CloudWatch Monitoring Screenshot
 
-![CloudWatch Monitoring](screenshots/11-cloudwatch-monitoring.png)
-
+![CloudWatch Monitoring](screenshots/11-cloudwatch-agents-running.png)
 ### Monitoring Outcome
 
 - Configured Amazon CloudWatch Observability for EKS.
