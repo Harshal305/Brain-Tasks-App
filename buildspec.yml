@@ -5,6 +5,7 @@ env:
     AWS_DEFAULT_REGION: us-east-1
     AWS_ACCOUNT_ID: "607705367381"
     IMAGE_REPO_NAME: brain-tasks-app
+    EKS_CLUSTER_NAME: brain-tasks-cluster
 
 phases:
   pre_build:
@@ -29,6 +30,20 @@ phases:
         set -e
         IMAGE_TAG=$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION" | cut -c 1-7)
         REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
-        echo "Pushing Docker image to ECR..."
+
+        echo "Pushing Docker image..."
         docker push $REPOSITORY_URI:$IMAGE_TAG
-        echo "Docker image successfully pushed to ECR."
+
+        echo "Installing kubectl..."
+        curl -LO "https://dl.k8s.io/release/v1.37.1/bin/linux/amd64/kubectl"
+        install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+        echo "Connecting to EKS..."
+        aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $EKS_CLUSTER_NAME
+
+        echo "Deploying application..."
+        kubectl set image deployment/brain-tasks-app brain-tasks-app=$REPOSITORY_URI:$IMAGE_TAG
+
+        kubectl rollout status deployment/brain-tasks-app --timeout=300s
+
+        echo "EKS deployment successful!"
