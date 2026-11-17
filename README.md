@@ -110,3 +110,26 @@ kubectl rollout status deployment/brain-tasks-app
 Harshal Patil
 
 Cloud & DevOps Engineering Practice Project
+
+## Project Screenshots
+
+### 1. AWS CodePipeline
+![CodePipeline](screenshots/01-codepipeline.png)
+
+### 2. AWS CodeBuild
+![CodeBuild](screenshots/02-codebuild.png)
+
+### 3. Amazon ECR
+![Amazon ECR](screenshots/03-ecr.png)
+
+### 4. Amazon EKS Cluster
+![EKS Cluster](screenshots/04-eks-cluster.png)
+
+### 5. Kubernetes Running Pods
+![Kubernetes Pods](screenshots/05-kubernetes-pods.png)
+
+### 6. Kubernetes LoadBalancer Service
+![LoadBalancer](screenshots/06-loadbalancer.png)
+
+### 7. Live Application
+![Live Application](screenshots/07-live-application.png)
