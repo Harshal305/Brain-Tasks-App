@@ -173,6 +173,81 @@ http://k8s-default-braintas-855b0d7d3c-00f32d0310ac2ce1.elb.us-east-1.amazonaws.
 ### 10. Live Application Through NLB
 ![NLB Live Application](screenshots/10-nlb-live-app.png)
 
+## 11. AWS CloudWatch Monitoring
+Amazon CloudWatch is integrated with the Amazon EKS cluster to monitor build, deployment, and application logs.
+
+### CloudWatch Configuration
+
+- EKS Cluster: `brain-tasks-cluster`
+- AWS Region: `us-east-1`
+- Observability Add-on: `amazon-cloudwatch-observability`
+- Add-on Version: `v7.0.1-eksbuild.1`
+- Namespace: `amazon-cloudwatch`
+
+### Monitoring Components
+
+The following components are successfully installed and running:
+
+- CloudWatch Agent
+- Fluent Bit
+- CloudWatch Observability Controller
+
+### CloudWatch Logs
+
+**1. Build and Deployment Logs**
+
+CodeBuild sends Docker build, ECR push, EKS connection, and Kubernetes deployment execution logs to CloudWatch.
+
+Log Group:
+
+```text
+/aws/codebuild/brain-tasks-codebuild
+```
+
+**2. Application Logs**
+
+CloudWatch Observability collects Kubernetes container logs using Fluent Bit.
+
+Application Log Group:
+
+```text
+/aws/containerinsights/brain-tasks-cluster/application
+```
+
+**3. EKS Monitoring Log Groups**
+
+```text
+/aws/containerinsights/brain-tasks-cluster/application
+/aws/containerinsights/brain-tasks-cluster/dataplane
+/aws/containerinsights/brain-tasks-cluster/host
+/aws/containerinsights/brain-tasks-cluster/performance
+```
+
+### Verification Commands
+
+Check CloudWatch monitoring components:
+
+```bash
+kubectl get pods -n amazon-cloudwatch
+```
+
+Check application logs:
+
+```bash
+kubectl logs deployment/brain-tasks-app
+```
+
+### CloudWatch Monitoring Screenshot
+
+![CloudWatch Monitoring](screenshots/11-cloudwatch-monitoring.png)
+
+### Monitoring Outcome
+
+- Configured Amazon CloudWatch Observability for EKS.
+- Installed and verified CloudWatch Agent and Fluent Bit.
+- Enabled Kubernetes container log collection.
+- Created CloudWatch log groups for application and infrastructure monitoring.
+- Configured CodeBuild build and deployment logging.
 ## Author
 
 **Harshal Patil**
