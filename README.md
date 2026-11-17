@@ -4,7 +4,7 @@ An end-to-end DevOps project demonstrating automated application deployment usin
 
 ## Project Architecture
 
-GitHub → AWS CodePipeline → AWS CodeBuild → Docker → Amazon ECR → Amazon EKS → Kubernetes Service → AWS LoadBalancer
+GitHub → AWS CodePipeline → AWS CodeBuild → Docker → Amazon ECR → Amazon EKS → Kubernetes Service → AWS Network Load Balancer
 
 ## Technologies Used
 
@@ -29,7 +29,7 @@ GitHub → AWS CodePipeline → AWS CodeBuild → Docker → Amazon ECR → Amaz
 5. CodeBuild connects to Amazon EKS.
 6. Kubernetes Deployment updates the application image.
 7. Kubernetes performs a rolling update.
-8. AWS LoadBalancer exposes the application publicly.
+8. AWS Network Load Balancer exposes the application publicly.
 
 ## Infrastructure Details
 
@@ -45,6 +45,7 @@ GitHub → AWS CodePipeline → AWS CodeBuild → Docker → Amazon ECR → Amaz
 | Container Port | 3000 |
 | ECR Repository | brain-tasks-app |
 | Pipeline | Brain-test-12 |
+| Load Balancer | Network Load Balancer |
 
 ## Docker Configuration
 
@@ -53,7 +54,8 @@ The application uses Nginx Alpine to serve the production-ready static files fro
 ## Kubernetes Resources
 
 - `deployment.yaml` – Application deployment with two replicas.
-- `service.yaml` – LoadBalancer service exposing the application on port 3000.
+- `service.yaml` – Kubernetes LoadBalancer service.
+- `brain-tasks-nlb-service` – Network Load Balancer service exposing the application publicly.
 
 ## CI/CD Pipeline
 
@@ -88,7 +90,7 @@ kubectl get deployment brain-tasks-app
 Check service:
 
 ```bash
-kubectl get svc brain-tasks-service
+kubectl get svc
 ```
 
 Check rollout:
@@ -101,15 +103,10 @@ kubectl rollout status deployment/brain-tasks-app
 
 - Successfully deployed the Brain Tasks application on Amazon EKS.
 - Configured two running Kubernetes replicas.
-- Exposed the application using an AWS LoadBalancer.
 - Implemented automated CI/CD deployment from GitHub to EKS.
+- Configured an AWS Network Load Balancer.
 - Verified successful pipeline execution and Kubernetes rollout.
-
-## Author
-
-Harshal Patil
-
-Cloud & DevOps Engineering Practice Project
+- Successfully tested public application access with HTTP 200 OK.
 
 ## Project Screenshots
 
@@ -133,3 +130,51 @@ Cloud & DevOps Engineering Practice Project
 
 ### 7. Live Application
 ![Live Application](screenshots/07-live-application.png)
+
+## AWS Network Load Balancer Details
+
+The Brain Tasks App is successfully deployed on Amazon EKS and exposed to the internet using an AWS Network Load Balancer (NLB).
+
+**Load Balancer Configuration**
+
+- Load Balancer Type: Network Load Balancer (NLB)
+- Load Balancer Name: `k8s-default-braintas-855b0d7d3c`
+- Region: `us-east-1`
+- Status: Active
+- Scheme: Internet-facing
+- Target Type: Instance
+- Application Port: `3000`
+- Kubernetes Service: `brain-tasks-nlb-service`
+
+### Load Balancer ARN
+
+```text
+arn:aws:elasticloadbalancing:us-east-1:607705367381:loadbalancer/net/k8s-default-braintas-855b0d7d3c/00f32d0310ac2ce1
+```
+
+### Live Application URL
+
+http://k8s-default-braintas-855b0d7d3c-00f32d0310ac2ce1.elb.us-east-1.amazonaws.com:3000
+
+### Application Verification
+
+- HTTP Response: `200 OK`
+- Web Server: Nginx
+- Application successfully accessible through the Network Load Balancer.
+
+## Network Load Balancer Screenshots
+
+### 8. AWS Network Load Balancer – Active Status
+![NLB Active](screenshots/08-nlb-active.png)
+
+### 9. Network Load Balancer ARN
+![NLB ARN](screenshots/09-nlb-arn.png)
+
+### 10. Live Application Through NLB
+![NLB Live Application](screenshots/10-nlb-live-app.png)
+
+## Author
+
+**Harshal Patil**
+
+Cloud & DevOps Engineering Practice Project
