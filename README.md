@@ -1,96 +1,112 @@
-DevOps Practice Project – Dist Directory
+# Brain Tasks App – End-to-End AWS DevOps CI/CD Project
 
-This repository contains the production-ready build files (dist folder) for DevOps practice and deployment exercises.
+An end-to-end DevOps project demonstrating automated application deployment using GitHub, AWS CodePipeline, CodeBuild, Docker, Amazon ECR, Amazon EKS and Kubernetes.
 
-It is intentionally structured to help learners focus on CI/CD pipelines, hosting, containerization, and infrastructure setup rather than application development.
+## Project Architecture
 
-📁 What This Repository Contains
+GitHub → AWS CodePipeline → AWS CodeBuild → Docker → Amazon ECR → Amazon EKS → Kubernetes Service → AWS LoadBalancer
 
-dist/ – Compiled and production-ready static files
+## Technologies Used
 
-HTML
+- Git and GitHub
+- Docker
+- Nginx (Alpine)
+- AWS CodePipeline
+- AWS CodeBuild
+- Amazon ECR
+- Amazon EKS
+- Kubernetes
+- AWS IAM
+- AWS EC2
+- AWS Elastic Load Balancing
 
-CSS
+## Project Workflow
 
-JavaScript
+1. Developer pushes code to GitHub.
+2. AWS CodePipeline automatically detects the change.
+3. CodeBuild builds the Docker image.
+4. Docker image is pushed to Amazon ECR.
+5. CodeBuild connects to Amazon EKS.
+6. Kubernetes Deployment updates the application image.
+7. Kubernetes performs a rolling update.
+8. AWS LoadBalancer exposes the application publicly.
 
-Assets (images, fonts, etc.)
+## Infrastructure Details
 
-These files are ready to deploy to:
+| Resource | Configuration |
+|---|---|
+| AWS Region | us-east-1 |
+| EKS Cluster | brain-tasks-cluster |
+| Node Group | brain-tasks-nodes |
+| EC2 Instance | t3.small |
+| Kubernetes Version | 1.37 |
+| Deployment | brain-tasks-app |
+| Replicas | 2 |
+| Container Port | 3000 |
+| ECR Repository | brain-tasks-app |
+| Pipeline | Brain-test-12 |
 
-Web servers (Nginx / Apache)
+## Docker Configuration
 
-Cloud platforms (AWS S3, Azure Blob, GCP Storage)
+The application uses Nginx Alpine to serve the production-ready static files from the `dist/` directory on port 3000.
 
-Containerized environments (Docker + Nginx)
+## Kubernetes Resources
 
-Kubernetes clusters
+- `deployment.yaml` – Application deployment with two replicas.
+- `service.yaml` – LoadBalancer service exposing the application on port 3000.
 
-CI/CD pipeline demonstrations
+## CI/CD Pipeline
 
-🎯 Purpose of This Repository
+The pipeline is configured to:
 
-This repository is designed for:
+- Detect GitHub source changes.
+- Build a Docker image.
+- Push the image to Amazon ECR.
+- Update the Kubernetes Deployment in EKS.
+- Verify the rollout status.
 
-DevOps beginners
+## Verification Commands
 
-CI/CD practice
+Check Kubernetes nodes:
 
-Deployment pipeline testing
+```bash
+kubectl get nodes
+```
 
-Docker & Kubernetes deployment exercises
+Check application pods:
 
-Web server configuration practice
+```bash
+kubectl get pods
+```
 
-Reverse proxy and load balancer setup
+Check deployment:
 
-The goal is to simulate real-world deployment scenarios using already built application files.
+```bash
+kubectl get deployment brain-tasks-app
+```
 
-❓ Why is there NO package.json?
+Check service:
 
-You may notice that this repository does not include:
+```bash
+kubectl get svc brain-tasks-service
+```
 
-package.json
+Check rollout:
 
-node_modules
+```bash
+kubectl rollout status deployment/brain-tasks-app
+```
 
-Source code (src/)
+## Project Outcome
 
-Build tools configuration
+- Successfully deployed the Brain Tasks application on Amazon EKS.
+- Configured two running Kubernetes replicas.
+- Exposed the application using an AWS LoadBalancer.
+- Implemented automated CI/CD deployment from GitHub to EKS.
+- Verified successful pipeline execution and Kubernetes rollout.
 
-✅ Reason:
+## Author
 
-This repository only contains the final production build output (dist), not the development source code.
+Harshal Patil
 
-In a typical project:
-
-Developers write source code.
-
-The project is built using tools like:
-
-Node.js
-
-Webpack
-
-Vite
-
-React (or other frameworks)
-
-A dist/ folder is generated.
-
-Only the production build is deployed to servers.
-
-This repository represents step 4 only.
-
-Since this is already the compiled output:
-
-No dependencies are required
-
-No build process is required
-
-No package.json is needed
-
-CI/CD Auto Trigger Test - November 2026
-Auto trigger verification - Wed Nov 11 09:11:20 UTC 2026
-Auto trigger verification - Wed Nov 11 09:34:33 UTC 2026
-Auto trigger verification - Wed Nov 11 09:36:20 UTC 2026
+Cloud & DevOps Engineering Practice Project
